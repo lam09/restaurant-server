@@ -1,0 +1,394 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/png" href="/admin-dashboard/assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title>Light Bootstrap Dashboard by Creative Tim</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="/admin-dashboard/assets/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Animation library for notifications   -->
+    <link href="/admin-dashboard/assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="/admin-dashboard/assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <!--<link href="/admin-dashboard/assets/css/demo.css" rel="stylesheet"/>-->
+
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="/admin-dashboard/assets/css/pe-icon-7-stroke.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+
+    <!--     Editable cell     -->
+    <link href="/admin-dashboard/assets/dist/css/xeditable.css" rel="stylesheet">
+    <script src="/admin-dashboard/assets/dist/js/xeditable.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-mocks.js"></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+    <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
+    <div class="main-panel">
+        <th:block th:include="/admin-dashboard/container/navbar"></th:block>
+        <div class="row" style="background-color: #a314ff;text-align:center">
+            <strong>
+                <h3>
+                    <script>document.write("Today is: " + new Date().toDateString())</script>
+                </h3>
+            </strong>
+        </div>
+        <div class="content" ng-app="DenneMenuManagement" ng-controller="Ctrl">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="row">
+                        <button class="btn btn-md btn-primary" ng-click="addMenu()"> <span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-md btn-primary" ng-click="sortMenu()"><span class="glyphicon glyphicon-sort-by-order"></span></button>
+                    </div>
+                    <div class="col-md-12" ng-repeat="menu in menuList | reverse">
+                        <!--<div class="card">-->
+                            <h4>Date: <a href="#" editable-date="menu.date">{{ (menu.date | date: "dd/MM") || 'add date'
+                                }}</a></h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed">
+                                    <tr style="font-weight: bold">
+                                        <td style="width:20%">Food Name</td>
+                                        <td style="width:10%">Weight</td>
+                                        <td style="width:10%">Allergens</td>
+                                        <!--<td style="width:10%">Status</td>-->
+                                        <td style="width:10%">Group</td>
+                                        <td style="width:20%">Description</td>
+                                        <td style="width:10%">Price</td>
+                                        <td style="width:20%">Edit</td>
+                                    </tr>
+                                    <tr ng-repeat="food in menu.foodList">
+                                        <td>
+                                            <!-- editable username (text with validation) -->
+                                            <span editable-text="food.name" e-name="name" e-form="rowform"
+                                                  onbeforesave="checkName($data, food.id)" e-required>
+                                                {{ food.name || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-text="food.weight" e-name="weight" e-form="rowform">
+                                                {{ food.weight|| 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-text="food.allergens" e-name="allergens" e-form="rowform">
+                                                {{ food.allergens || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <!--<td>-->
+                                        <!--&lt;!&ndash; editable status (select-local) &ndash;&gt;-->
+                                        <!--<span editable-select="food.status" e-name="status" e-form="rowform"-->
+                                        <!--e-ng-options="s.value as s.text for s in statuses">-->
+                                        <!--{{ showStatus(food) }}-->
+                                        <!--</span>-->
+                                        <!--</td>-->
+                                        <td>
+                                            <!-- editable group (select-remote) -->
+                                            <span editable-select="food.group" e-name="group" onshow="loadGroups()"
+                                                  e-form="rowform" e-ng-options="g.id as g.text for g in groups">
+                                                {{ showGroup(food) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <!-- editable username (text with validation) -->
+                                            <span editable-text="food.description" e-name="description" e-form="rowform"
+                                            >
+                                                {{ food.description || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <!-- editable username (text with validation) -->
+                                            <span editable-number="food.price" e-name="price" e-form="rowform"
+                                                  e-required>
+                                                {{ food.price || 'empty' }}
+                                            </span>
+                                        </td>
+
+
+                                        <td style="white-space:normal">
+                                            <!-- form -->
+                                            <form editable-form name="rowform" onbeforesave="saveFood($data, food)"
+                                                  ng-show="rowform.$visible" class="form-buttons form-inline"
+                                                  shown="inserted == food">
+                                                <button type="submit" ng-disabled="rowform.$waiting"
+                                                        class="btn btn-sm btn-primary">
+                                                    <span class="glyphicon glyphicon-save"></span>
+                                                </button>
+                                                <button type="button" ng-disabled="rowform.$waiting"
+                                                        ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
+                                                    cancel
+                                                </button>
+                                            </form>
+                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                <button class="btn btn-sm btn-primary" ng-click="rowform.$show()"><span class="	glyphicon glyphicon-edit"></span></button>
+                                                <button class="btn btn-sm btn-danger" ng-click="removeFood(menu,$index)"><span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <button class="btn btn-md btn-default" ng-click="addFood(menu)">Add food</button>
+                                <button class="btn btn-md btn-danger" ng-click="removeMenu($index)">Remove Menu</button>
+
+                            </div>
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:include="/admin-dashboard/container/footer"></th:block>
+    </div>
+</div>
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="/admin-dashboard/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/admin-dashboard/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="/admin-dashboard/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="/admin-dashboard/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="/admin-dashboard/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
+
+<script>
+    $(document).ready(function () {
+        $(".nav li").removeClass("active");
+        $("#products").addClass("active")
+    });
+
+    $("#show-product-form").click(function () {
+        if ($("#show-product-form").text() == "Hide") {
+            $("#show-product-form").text("Add new");
+        }
+        else {
+            $("#show-product-form").text("Hide");
+        }
+    });
+</script>
+<script>
+    var app = angular.module("DenneMenuManagement", ["xeditable"/*, "ngMockE2E"*/]);
+
+    app.run(function (editableOptions) {
+        editableOptions.theme = 'bs3';
+    });
+
+    // --------------- mock $http requests ----------------------
+    /*  app.run(function ($httpBackend) {
+     $httpBackend.whenGET('/groups').respond([
+     {id: 1, text: 'shoup'},
+     {id: 2, text: 'main food'},
+     {id: 3, text: 'desert'},
+     {id: 4, text: 'fruit'}
+     ]);
+
+     $httpBackend.whenPOST(/\/saveUser/).respond(function (method, url, data) {
+     data = angular.fromJson(data);
+     return [200, {status: 'ok'}];
+     });
+     });*/
+
+    app.filter('reverse', function () {
+        return function (items) {
+            return items.slice().reverse();
+        };
+    });
+    app.controller('Ctrl', function ($scope, $filter, $http) {
+
+
+        $scope.foodList = [
+            /*    {id: 1, name: 'chrumkava kura', weight:200,allergens:"1,3,5",status: 2, group: 4, groupName: 'fruit',description:"no description",price:"5.50"},
+             {id: 2, name: 'chrumkava kacica',weight:200,allergens:"1,3,5", status: undefined, group: 3, groupName: 'desert',description:"no description",price:"5.50"},
+             {id: 3, name: 'opekane rezance',weight:200,allergens:"1,3,5", status: 2, group: null,description:"no description",price:"5.50"}*/
+        ];
+
+        $scope.menuList = [{
+            id: 1,
+            date: "2018-07-17",
+            foodList: $scope.foodList
+        }];
+        _getMenuList();
+
+        $scope.statuses = [
+            {value: 1, text: 'hot'},
+            {value: 2, text: 'very hot'},
+            {value: 3, text: 'cold'},
+            {value: 4, text: 'ice'}
+        ];
+
+        $scope.groups = [];
+
+        /*    $scope.groups=[
+         {id: 1, text: 'shoup'},
+         {id: 2, text: 'main food'},
+         {id: 3, text: 'desert'},
+         {id: 4, text: 'fruit'}
+         ]*/
+        $scope.loadGroups = function () {
+            return $scope.groups.length ? null :
+                $http.get('/groups').then(_success, _error);
+        };
+
+        function _success(data) {
+            console.log("load group " + angular.toJson(data.data))
+            $scope.groups = data.data;
+        }
+
+        function _error() {
+        }
+
+        $scope.showGroup = function (food) {
+            if (food.group && $scope.groups.length) {
+                var selected = $filter('filter')($scope.groups, {id: food.group});
+                return selected.length ? selected[0].text : 'Not set';
+            } else {
+                return food.groupName || 'Not set';
+            }
+        };
+
+        $scope.showStatus = function (food) {
+            var selected = [];
+            if (food.status) {
+                selected = $filter('filter')($scope.statuses, {value: food.status});
+            }
+            return selected.length ? selected[0].text : 'Not set';
+        };
+
+        $scope.checkName = function (data, id) {
+
+            console.log("checked name");
+            /*            if (id === 2 && data !== 'awesome') {
+             return "Username 2 should be `awesome`";
+             }
+             */
+
+        };
+
+        $scope.saveFood = function (data, food) {
+            food = angular.extend(food, data);
+            $http({
+                method: 'POST',
+                url: '/admin/saveMenu',
+                data: angular.toJson($scope.menuList)
+            }).then(_updateMenuList, _error());
+        };
+
+        function _updateMenuList(data) {
+            console.log("load menuList " + angular.toJson(data.data))
+
+            $scope.menuList = data.data;
+        };
+
+        function _getMenuList() {
+            $http({
+                method: 'GET',
+                url: '/admin/getMenu',
+            }).then(_updateMenuList, _error());
+        };
+
+        $scope.sortMenu = function () {
+            $http({
+                method: 'GET',
+                url: '/admin/getSortedMenu',
+            }).then(_updateMenuList, _error());
+        };
+
+        $scope.summitFood = function (data) {
+            console.log("summit food " + angular.toJson(data));
+        };
+
+        // remove user
+        $scope.removeFood = function (menu, index) {
+            console.log(angular.toJson(menu.foodList));
+            console.log("remove index " + index);
+            menu.foodList.splice(index, 1);
+            console.log(angular.toJson(menu.foodList));
+
+        };
+
+        // add food
+        $scope.addFood = function (menu) {
+            $scope.inserted = {
+                id: $scope.foodList.length + 1,
+                name: '',
+                status: null,
+                group: null,
+                description: null,
+                price: 0.00
+            };
+            menu.foodList.push($scope.inserted);
+        };
+
+        $scope.addMenu = function () {
+            $scope.newMenu = {
+                date: "",
+                foodList: [
+                    {
+                        id: 1,
+                        name: 'insert new food',
+                        status: 2,
+                        group: 4,
+                        groupName: 'fruit',
+                        description: "add description",
+                        price: "0.00"
+                    }
+                ]
+            };
+            $scope.menuList.push($scope.newMenu);
+        }
+        $scope.removeMenu = function (index) {
+
+            i = $scope.menuList.length - index - 1;//reverse iterate
+
+            $scope.menuList.splice(i, 1);
+        }
+        $scope.$watch('$scope.menuList', function (newVal, oldVal) {
+            console.log("menuList changed");
+        })
+
+        $scope.saveMenu = function () {
+            $http({
+                method: 'POST',
+                url: '/admin/saveMenu',
+                data: angular.toJson($scope.menuList),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(_success, _error);
+        }
+    });
+
+
+</script>
+</html>

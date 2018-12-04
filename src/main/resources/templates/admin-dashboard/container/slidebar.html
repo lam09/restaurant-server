@@ -1,0 +1,70 @@
+<div class="sidebar" data-color="purple" data-image="/admin-dashboard/assets/img/sidebar-5.jpg"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <a th:href="@{/}" class="simple-text">
+                <i class="pe-7s-home"></i>
+                Shop's Name
+            </a>
+        </div>
+
+        <ul class="nav">
+            <li id="dashboard" class="active">
+                <a th:href="@{/admin/dashboard}">
+                    <i class="pe-7s-graph"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <li id="orders">
+                <a th:href="@{/admin/dennemenu}">
+                    <i class="pe-7s-note2"></i>
+                    <p>Denné menu</p>
+                </a>
+            </li>
+            <li id="products">
+                <a th:href="@{/admin/foods}">
+                    <i class="pe-7s-note2"></i>
+                    <p>Jedalný listok</p>
+                </a>
+            </li>
+            <!--<li id="accounts">-->
+                <!--<a th:href="@{/admin/accounts}">-->
+                    <!--<i class="pe-7s-users"></i>-->
+                    <!--<p>Accouts</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li id="icons">-->
+                <!--<a th:href="@{/admin/icons}">-->
+                    <!--<i class="pe-7s-science"></i>-->
+                    <!--<p>Icons</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="maps.html">-->
+                    <!--<i class="pe-7s-map-marker"></i>-->
+                    <!--<p>Maps</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="notifications.html">-->
+                    <!--<i class="pe-7s-bell"></i>-->
+                    <!--<p>Notifications</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="active-pro">-->
+                <!--<a href="upgrade.html">-->
+                    <!--<i class="pe-7s-rocket"></i>-->
+                    <!--<p>Upgrade to PRO</p>-->
+                <!--</a>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</div>
