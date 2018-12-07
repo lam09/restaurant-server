@@ -24,6 +24,8 @@ public class Account implements Serializable {
     @Column(name = "ENCRYTED_PASSWORD", length = 128, nullable = false)
     private String encrytedPassword;
 
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "ACCOUNT_ROLE",

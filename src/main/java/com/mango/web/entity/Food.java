@@ -28,11 +28,14 @@ public class Food{
     String groupName;
     @Column(name = "status")
     String status;
+
+    @Column(name = "parent")
+    Food parent;
+
     @ManyToOne
     @JoinColumn(name = "menu_id")
     @JsonIgnore
     Menu menu;
-
 
     public Menu getMenu() {
         return menu;
@@ -66,6 +69,13 @@ public class Food{
         this.groupName = groupName;
     }
 
+
+    public Food getParent()
+    {
+        return parent;
+    }
+    public void setParent(Food parent)
+    {this.parent=parent;}
 
     public String getStatus() {
         return status;
