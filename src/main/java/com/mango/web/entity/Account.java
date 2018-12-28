@@ -4,50 +4,66 @@ package com.mango.web.entity;
  * Created by a.lam.tuan on 23. 5. 2018.
  */
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity
-@Table(name = "ACCOUNT",
-        uniqueConstraints = { @UniqueConstraint(columnNames = "username") })
+@Document(collection = "account")
 public class Account implements Serializable {
 
     @Id
-    @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "USERNAME", length = 20, nullable = false)
-    private String username;
-
-    @Column(name = "ENCRYTED_PASSWORD", length = 128, nullable = false)
-    private String encrytedPassword;
-
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "ACCOUNT_ROLE",
-            joinColumns = @JoinColumn(name = "ACCOUNT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
-    )
+    private String id;
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
+    private String email;
+    private String password;
+    private String fullname;
+    private boolean enabled;
+    @DBRef
     private Set<Role> roles;
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getEncrytedPassword() {
-        return encrytedPassword;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEncrytedPassword(String encrytedPassword) {
-        this.encrytedPassword = encrytedPassword;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Set<Role> getRoles() {
@@ -57,5 +73,4 @@ public class Account implements Serializable {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
 }

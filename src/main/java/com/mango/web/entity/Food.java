@@ -1,15 +1,14 @@
 package com.mango.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
  */
 
-@Entity
-@Table(name = "food")
+@Document(collection = "food")
 public class Food{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,9 +28,9 @@ public class Food{
     @Column(name = "status")
     String status;
 
-    @Column(name = "parent")
+ /*   @Column(name = "parent")
     Food parent;
-
+*/
     @ManyToOne
     @JoinColumn(name = "menu_id")
     @JsonIgnore
@@ -69,14 +68,14 @@ public class Food{
         this.groupName = groupName;
     }
 
-
+/*
     public Food getParent()
     {
         return parent;
     }
     public void setParent(Food parent)
     {this.parent=parent;}
-
+*/
     public String getStatus() {
         return status;
     }

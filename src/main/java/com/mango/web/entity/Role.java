@@ -4,45 +4,34 @@ package com.mango.web.entity;
  * Created by a.lam.tuan on 11. 6. 2018.
  */
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 
-import javax.persistence.*;
-import java.io.Serializable;
-
-@Entity
-@Table(name = "ROLE")
-public class Role implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Document(collection = "role")
+public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", nullable = false)
-    private int id;
+    private String id;
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
 
-    @Column(name = "NAME", nullable = false)
-    private String name;
+    private String role;
 
-    public Role() {
-    }
-
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

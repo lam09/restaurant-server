@@ -35,13 +35,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance()).withUser("kai").password("123456").roles("USER");
     }
     */
-    @Bean
+/*    @Bean
     public AuthenticationSuccessHandler successHandler() {
         SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
         handler.setUseReferer(true);
         return handler;
-    }
-
+    }*/
+/*
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -59,5 +59,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Cấu hình cho Logout Page.
                 .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?message=logout");
 
-    }
+    }*/
 }

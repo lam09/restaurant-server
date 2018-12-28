@@ -3,6 +3,7 @@ package com.mango.web.entity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,8 +12,7 @@ import java.util.List;
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
  */
-@Entity
-@Table(name = "menu")
+@Document(collection = "menu")
 public class Menu{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
