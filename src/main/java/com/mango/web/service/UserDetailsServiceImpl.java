@@ -29,14 +29,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.print("user name is "+username);
-        Account user = accountRepository.findAccountByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.print("user email is "+email);
+        Account user = accountRepository.findAccountByEmail(email);
        // System.out.println("Account= " + user.getName());
 
         if (user == null) {
             throw new UsernameNotFoundException("User " //
-                    + username + " was not found in the database");
+                    + email + " was not found in the database");
         }
 
         // EMPLOYEE,MANAGER,..
@@ -48,15 +48,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         for(Role role: roles)
         {
             // ROLE_EMPLOYEE, ROLE_MANAGER
-            GrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+            GrantedAuthority authority = new SimpleGrantedAuthority(role.getRole());
             grantList.add(authority);
         }
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
-        UserDetails userDetails = (UserDetails) new User(user.getUsername(), //
-                user.getEncrytedPassword(), true, accountNonExpired, //
+        UserDetails userDetails = (UserDetails) new User(user.getEmail(), //
+                user.getPassword(), true, accountNonExpired, //
                 credentialsNonExpired, accountNonLocked, grantList);
 
         return userDetails;

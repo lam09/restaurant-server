@@ -41,13 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         handler.setUseReferer(true);
         return handler;
     }*/
-/*
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("*").permitAll();
 
-        http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
+    /*    http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
         // Cấu hình cho Login Form.
         http.authorizeRequests().and().formLogin()//
                 .loginProcessingUrl("/j_spring_security_login")//
@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 // Cấu hình cho Logout Page.
-                .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?message=logout");
+                .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?message=logout");*/
 
-    }*/
+    }
 }

@@ -3,9 +3,10 @@ package com.mango.web.entity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +16,10 @@ import java.util.List;
 @Document(collection = "menu")
 public class Menu{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
-
-    @Column(name = "date")
+/*
+    @Field(value = "date")
     Date date;
-    @OneToMany(mappedBy = "menu",cascade = CascadeType.ALL)
-    List<Food> foodList;
 
     public Menu(){}
 
@@ -61,5 +59,5 @@ public class Menu{
         }
         return jsonString;
     }
-
+*/
 }

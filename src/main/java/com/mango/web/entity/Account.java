@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Document(collection = "account")
-public class Account implements Serializable {
+public class Account{
 
     @Id
     private String id;

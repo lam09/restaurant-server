@@ -1,7 +1,10 @@
 package com.mango.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 
 /**
@@ -9,97 +12,61 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection = "food")
-public class Food{
+public class Food {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-    @Column(name = "weight")
-    Integer weight=0; // in gram
-    @Column(name = "allergens")
-    String allergens="";
-    @Column(name = "name")
-    String name;
-    @Column(name = "description")
-    String description;
-    @Column(name = "price")
-    Double price;
-    @Column(name = "groupName")
-    String groupName;
-    @Column(name = "status")
-    String status;
+    private String id;
+    @Field(value = "serial")
+    private Integer serial;
+    @Field(value = "title")
+    private String title;
+    @Field(value = "price")
+    private String price;
+    @Field(value = "description")
+    private String description;
+    @Field(value = "type")
+    private String type;
 
- /*   @Column(name = "parent")
-    Food parent;
-*/
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
-    @JsonIgnore
-    Menu menu;
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public String getAllergens() {
-        return allergens;
-    }
-
-    public void setAllergens(String allergens) {
-        this.allergens = allergens;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-/*
-    public Food getParent()
-    {
-        return parent;
-    }
-    public void setParent(Food parent)
-    {this.parent=parent;}
-*/
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Food(){}
 
-    public Integer getId() {
+    public Integer getSerial() {
+        return serial;
+    }
+
+    public void setSerial(Integer serial) {
+        this.serial = serial;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getDescription() {
@@ -110,21 +77,5 @@ public class Food{
         this.description = description;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getGroup() {
-        return groupName;
-    }
-
-    public void setGroup(String groupName) {
-        this.groupName = groupName;
-    }
-
-
 }
+

@@ -74,7 +74,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addAccount("user","123456",set);*/
     }
 
-    private Account addAccount(String name, String password, Set<Role> roles){
+  /*  private Account addAccount(String name, String password, Set<Role> roles){
         Account user = new Account();
         user.setUsername(name);
         user.setEncrytedPassword(passwordEncoder.encode(password));
@@ -90,5 +90,5 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         }
         else return role;
     }
-
+*/
 }
