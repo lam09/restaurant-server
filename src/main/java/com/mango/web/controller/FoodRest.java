@@ -3,11 +3,14 @@ package com.mango.web.controller;
 import com.mango.web.entity.Food;
 import com.mango.web.repo.FoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -55,4 +58,33 @@ public class FoodRest {
         foodRepository.delete(food);
         return "deleted";
     }
+    @ResponseBody
+    @RequestMapping(value = "/food/update",method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Food updateFood( @RequestBody Food food){
+        System.out.println("Update food");
+        Food foodInDb = foodRepository.findFoodById(food.getId());
+        foodInDb.setSerial(food.getSerial());
+        foodInDb.setDescription(food.getDescription());
+        foodInDb.setPrice(food.getPrice());
+        foodInDb.setTitle(food.getTitle());
+        foodInDb.setType(food.getType());
+        return foodRepository.save(foodInDb);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/food/all",method = RequestMethod.GET,
+            /*  consumes = {MediaType.APPLICATION_JSON_VALUE},*/produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Food> getAllFoods(@RequestParam("page") Optional<String> page, @RequestParam("pageSize") Optional<String> pageSize)
+    {
+        return foodRepository.selectCustomFoods(Integer.parseInt(page.get()),Integer.parseInt(pageSize.get()));
+    }
+    @ResponseBody
+    @RequestMapping(value = "/food/type",method = RequestMethod.GET,
+            /*  consumes = {MediaType.APPLICATION_JSON_VALUE},*/produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Food> getAllFoods(@RequestParam("type") Optional<String> type)
+    {
+        return foodRepository.findFoodsByType(type.get());
+    }
+
 }

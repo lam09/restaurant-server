@@ -3,6 +3,8 @@ package com.mango.web.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,6 +18,7 @@ public class Food {
     @Id
     private String id;
     @Field(value = "serial")
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
     private Integer serial;
     @Field(value = "title")
     private String title;
