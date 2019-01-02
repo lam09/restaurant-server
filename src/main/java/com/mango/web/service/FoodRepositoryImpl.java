@@ -23,6 +23,5 @@ public class FoodRepositoryImpl implements FoodCustomRepository {
         Query query = new Query();
         query.with(pageableRequest);
         return mongoTemplate.find(query,Food.class);
-        //return null;
     }
 }

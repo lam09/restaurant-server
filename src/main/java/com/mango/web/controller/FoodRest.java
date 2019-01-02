@@ -2,10 +2,8 @@ package com.mango.web.controller;
 
 import com.mango.web.entity.Food;
 import com.mango.web.repo.FoodRepository;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,7 @@ public class FoodRest {
     @RequestMapping(value = "/food/insert",method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Food insertFood( @RequestBody Food food){
-        System.out.println("Hello");
+        if(foodRepository.findFoodBySerial(food.getSerial())!=null) return null;
         return foodRepository.insert(food);
     }
     @ResponseBody
@@ -77,6 +75,7 @@ public class FoodRest {
             /*  consumes = {MediaType.APPLICATION_JSON_VALUE},*/produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Food> getAllFoods(@RequestParam("page") Optional<String> page, @RequestParam("pageSize") Optional<String> pageSize)
     {
+        System.out.println("Hello, I received a request");
         return foodRepository.selectCustomFoods(Integer.parseInt(page.get()),Integer.parseInt(pageSize.get()));
     }
     @ResponseBody
