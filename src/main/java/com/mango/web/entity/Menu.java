@@ -16,48 +16,15 @@ import java.util.List;
 @Document(collection = "menu")
 public class Menu{
     @Id
-    Integer id;
-/*
-    @Field(value = "date")
-    Date date;
+    String id;
+    List<Food> food_ids;
+    String name;
 
-    public Menu(){}
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public List<Food> getFoodList() {
-        return foodList;
-    }
-
-    public void setFoodList(List<Food> foodList) {
-        this.foodList = foodList;
-    }
-
-    @Override
-    public String toString() {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            jsonString = mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
-    }
-*/
 }
