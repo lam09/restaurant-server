@@ -20,24 +20,6 @@ public class OrderRepositoryImpl implements OrderCustomRepository {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Override
-    public Order addNextOrderInday(Order order) {
-        Query query = new Query();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
-        System.out.println(dateFormat.format(today));
-        query.addCriteria(Criteria.where("date").is(dateFormat.format(today)));
-        List<Order> orders = mongoTemplate.find(query,Order.class);
-        int lastOrderNo=1;
-        if(orders!=null&&orders.size()>0){
-            System.out.println("Today we received "+orders.size());
-            lastOrderNo = orders.get(0).getOrderNo();
-        }
-        order.setOrderNo(++lastOrderNo);
-
-        mongoTemplate.save(order);
-        return order;
-    }
 
     @Override
     public Integer lastOrderNoToday(){
@@ -56,6 +38,14 @@ public class OrderRepositoryImpl implements OrderCustomRepository {
             lastOrderNo++;
         }
         return lastOrderNo;
+    }
+
+    @Override
+    public Order findOrderByOrderNo(Integer orderNo) {
+        Query query = new Query();
+        query.with(new Sort(Sort.Direction.DESC,"date"));
+        query.addCriteria(Criteria.where("orderNo").is(orderNo));
+        return null;
     }
 
 }

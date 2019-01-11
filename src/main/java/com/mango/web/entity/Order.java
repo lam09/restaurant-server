@@ -1,6 +1,8 @@
 package com.mango.web.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Time;
@@ -17,6 +19,16 @@ public class Order {
     Date date;
 //    List<Food> food_ids;
     List<OrderItem> order_items;
+    //@Indexed(unique = true,direction = IndexDirection.DESCENDING,dropDups = true)
+    Integer tableNo;
+
+    public Integer getTableNo() {
+        return tableNo;
+    }
+
+    public void setTableNo(Integer tableNo) {
+        this.tableNo = tableNo;
+    }
 
     public List<OrderItem> getOrder_items() {
         return order_items;

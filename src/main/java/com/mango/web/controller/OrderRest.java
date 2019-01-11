@@ -3,6 +3,7 @@ package com.mango.web.controller;
 import com.mango.web.entity.Food;
 import com.mango.web.entity.Order;
 import com.mango.web.entity.OrderItem;
+import com.mango.web.forms.OrderForm;
 import com.mango.web.repo.FoodRepository;
 import com.mango.web.repo.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,16 @@ public class OrderRest {
     @ResponseBody
     @RequestMapping(value = "/order/newOrder",method = RequestMethod.POST,
     consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Order addNewOrder(@RequestBody Integer[] serialList){
+    public Order addNewOrder(@RequestBody OrderForm orderForm){
         Order order = new Order();
+        order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
+        order.setTableNo(orderForm.getTableNo());
+        Integer orderNo=orderRepository.lastOrderNoToday();
+        order.setOrderNo(orderNo);
+        order.setDate(new Date());
+        return orderRepository.save(order);
+    }
+    ArrayList<OrderItem> getOrderItem(Integer[] serialList){
         ArrayList<OrderItem>foods=new ArrayList<>();
         for(Integer f:serialList){
             Food food=foodRepository.findFoodBySerial(f);
@@ -40,10 +49,17 @@ public class OrderRest {
             orderItem.setTitle(food.getTitle());
             foods.add(orderItem);
         }
-        order.setOrder_items(foods);
-        Integer orderNo=orderRepository.lastOrderNoToday();
-        order.setOrderNo(orderNo);
-        order.setDate(new Date());
+        return foods;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/order/update",method = RequestMethod.POST,
+    consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Order updateOrder(@RequestBody OrderForm orderForm)
+    {
+        Order order=orderRepository.findOrderByOrderNo(orderForm.getOrderNo());
+        order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
+        order.setTableNo(orderForm.getTableNo());
         return orderRepository.save(order);
     }
 
