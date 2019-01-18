@@ -11,6 +11,8 @@ import java.util.List;
 
 @Document(collection = "order")
 public class Order {
+    public enum OrderState{CONFIRMED,PROCESSING,CANCELLED}
+
 
     @Id
     String id;
@@ -21,6 +23,15 @@ public class Order {
     List<OrderItem> order_items;
     //@Indexed(unique = true,direction = IndexDirection.DESCENDING,dropDups = true)
     Integer tableNo;
+    String orderState;
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
 
     public Integer getTableNo() {
         return tableNo;

@@ -7,17 +7,14 @@ import com.mango.web.forms.OrderForm;
 import com.mango.web.repo.FoodRepository;
 import com.mango.web.repo.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class OrderRest {
@@ -37,6 +34,7 @@ public class OrderRest {
         Integer orderNo=orderRepository.lastOrderNoToday();
         order.setOrderNo(orderNo);
         order.setDate(new Date());
+
         return orderRepository.save(order);
     }
     ArrayList<OrderItem> getOrderItem(Integer[] serialList){
@@ -60,7 +58,17 @@ public class OrderRest {
         Order order=orderRepository.findOrderByOrderNo(orderForm.getOrderNo());
         order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
         order.setTableNo(orderForm.getTableNo());
+        order.setOrderState(orderForm.getState());
         return orderRepository.save(order);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/order/get",method = RequestMethod.GET,
+    consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Order> getOrder(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize,
+                                @RequestParam("state") Optional<String>state,@RequestParam("date") Optional<String>date)
+    {
+        return orderRepository.getOrders(page,pageSize,state,date);
     }
 
 }
