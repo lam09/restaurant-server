@@ -11,7 +11,7 @@ import java.util.List;
 
 @Document(collection = "order")
 public class Order {
-    public enum OrderState{CONFIRMED,PROCESSING,CANCELLED}
+    public enum OrderState{WAITING,DELIVERED,COMPLETED,CANCELLED}
 
 
     @Id
@@ -23,13 +23,13 @@ public class Order {
     List<OrderItem> order_items;
     //@Indexed(unique = true,direction = IndexDirection.DESCENDING,dropDups = true)
     Integer tableNo;
-    String orderState;
+    OrderState orderState= OrderState.WAITING;
 
-    public String getOrderState() {
+    public OrderState getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(String orderState) {
+    public void setOrderState(OrderState orderState) {
         this.orderState = orderState;
     }
 

@@ -1,16 +1,18 @@
 package com.mango.web.forms;
 
+import com.mango.web.entity.Order;
+
 public class OrderForm {
     Integer orderNo;
     Integer tableNo;
     Integer[] foodSerialList;
-    String state;
+    Order.OrderState state;
 
-    public String getState() {
+    public Order.OrderState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Order.OrderState state) {
         this.state = state;
     }
 
