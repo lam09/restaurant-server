@@ -6,14 +6,15 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "table")
-public class Table {
+@Document(collection = "OrderLocation")
+public class OrderLocation {
     @Id
     String id;
-    @Field(value = "tableNo")
+    @Field(value = "orderLocationNo")
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
-    Integer tableNo;
+    Integer orderLocationNo;
     String description;
+    Integer capacita;
 
     public String getId() {
         return id;
@@ -23,12 +24,20 @@ public class Table {
         this.id = id;
     }
 
-    public Integer getTableNo() {
-        return tableNo;
+    public Integer getOrderLocationNo() {
+        return orderLocationNo;
     }
 
-    public void setTableNo(Integer tableNo) {
-        this.tableNo = tableNo;
+    public void setOrderLocationNo(Integer orderLocationNo) {
+        this.orderLocationNo = orderLocationNo;
+    }
+
+    public Integer getCapacita() {
+        return capacita;
+    }
+
+    public void setCapacita(Integer capacita) {
+        this.capacita = capacita;
     }
 
     public String getDescription() {

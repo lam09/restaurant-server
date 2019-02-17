@@ -5,6 +5,7 @@ import com.mango.web.repo.FoodRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +62,7 @@ public class FoodRest {
             consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
     public Food updateFood( @RequestBody Food food){
         System.out.println("Update food");
+        System.out.println(food.getId());
         Food foodInDb = foodRepository.findFoodById(food.getId());
         foodInDb.setSerial(food.getSerial());
         foodInDb.setDescription(food.getDescription());

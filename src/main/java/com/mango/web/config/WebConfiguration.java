@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //import org.thymeleaf.templatemode.TemplateMode;
 //import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-@Configuration
+//@Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 /*
     @Bean

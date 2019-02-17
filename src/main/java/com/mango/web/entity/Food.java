@@ -8,13 +8,15 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+
 
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
  */
 
 @Document(collection = "food")
-public class Food {
+public class Food implements Serializable {
     @Id
     private String id;
     @Field(value = "serial")

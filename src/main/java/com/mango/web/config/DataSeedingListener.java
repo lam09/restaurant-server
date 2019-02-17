@@ -1,17 +1,11 @@
 package com.mango.web.config;
 
-import com.mango.web.entity.Account;
-import com.mango.web.entity.Role;
 import com.mango.web.repo.AccountRepository;
-import com.mango.web.repo.RoleRepositorry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by a.lam.tuan on 11. 6. 2018.
@@ -22,11 +16,10 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private RoleRepositorry roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    //@Autowired
+    //private PasswordEncoder passwordEncoder;
 
 
 

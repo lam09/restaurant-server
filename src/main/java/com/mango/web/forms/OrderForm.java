@@ -4,7 +4,7 @@ import com.mango.web.entity.Order;
 
 public class OrderForm {
     Integer orderNo;
-    Integer tableNo;
+    Integer tableNo; //location number
     Integer[] foodSerialList;
     Order.OrderState state;
 

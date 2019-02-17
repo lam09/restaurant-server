@@ -16,9 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-@Configuration
-@EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+//@Configuration
+//@EnableWebSecurity
+public class WebSecurityConfig{}/* extends WebSecurityConfigurerAdapter {
 
     UserDetailsServiceImpl userDetailsService;
 
@@ -42,10 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return handler;
     }*/
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("*").permitAll();
+ //   @Override
+  //  protected void configure(HttpSecurity http) throws Exception {
+   //     http.csrf().disable();
+    //    http.authorizeRequests().antMatchers("*").permitAll();
 
     /*    http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
         // Cấu hình cho Login Form.
@@ -59,5 +59,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Cấu hình cho Logout Page.
                 .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?message=logout");*/
 
-    }
-}
+//    }
+//}*/

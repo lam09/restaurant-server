@@ -6,20 +6,16 @@ package com.mango.web.service;
 
 
 import com.mango.web.entity.Account;
-import com.mango.web.entity.Role;
 import com.mango.web.repo.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -29,39 +25,31 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.print("user email is "+email);
-        Account user = accountRepository.findAccountByEmail(email);
-       // System.out.println("Account= " + user.getName());
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.accountRepository.findAccountByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
+    }
+/*    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.print("user email is "+username);
+        Account user = accountRepository.findAccountByUsername(username).get();
 
         if (user == null) {
             throw new UsernameNotFoundException("User " //
-                    + email + " was not found in the database");
+                    + username + " was not found in the database");
         }
-
-        // EMPLOYEE,MANAGER,..
-        if(user.getRoles()==null) System.out.print("no role");
-        Set<Role> roles = user.getRoles();
-
-        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-
-        for(Role role: roles)
-        {
-            // ROLE_EMPLOYEE, ROLE_MANAGER
-            GrantedAuthority authority = new SimpleGrantedAuthority(role.getRole());
-            grantList.add(authority);
-        }
-        boolean accountNonExpired = true;
+     List<GrantedAuthority> grantList = user.getAuthorities().stream().collect(Collectors.toList());
+         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
-        UserDetails userDetails = (UserDetails) new User(user.getEmail(), //
+        UserDetails userDetails = (UserDetails) new User(user.getUsername(), //
                 user.getPassword(), true, accountNonExpired, //
                 credentialsNonExpired, accountNonLocked, grantList);
 
         return userDetails;
     }
-
+*/
 /*
 
     @Override

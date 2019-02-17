@@ -24,23 +24,25 @@ public class OrderRest {
 
     @Autowired
     FoodRepository foodRepository;
+
     @ResponseBody
-    @RequestMapping(value = "/order/newOrder",method = RequestMethod.POST,
-    consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Order addNewOrder(@RequestBody OrderForm orderForm){
+    @RequestMapping(value = "/order/newOrder", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Order addNewOrder(@RequestBody OrderForm orderForm) {
         Order order = new Order();
         order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
         order.setTableNo(orderForm.getTableNo());
-        Integer orderNo=orderRepository.lastOrderNoToday();
+        Integer orderNo = orderRepository.lastOrderNoToday();
         order.setOrderNo(orderNo);
         order.setDate(new Date());
 
         return orderRepository.save(order);
     }
-    ArrayList<OrderItem> getOrderItem(Integer[] serialList){
-        ArrayList<OrderItem>foods=new ArrayList<>();
-        for(Integer f:serialList){
-            Food food=foodRepository.findFoodBySerial(f);
+
+    ArrayList<OrderItem> getOrderItem(Integer[] serialList) {
+        ArrayList<OrderItem> foods = new ArrayList<>();
+        for (Integer f : serialList) {
+            Food food = foodRepository.findFoodBySerial(f);
             OrderItem orderItem = new OrderItem();
             orderItem.setFoodSerial(food.getSerial());
             orderItem.setPrice(food.getPrice());
@@ -51,11 +53,10 @@ public class OrderRest {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/order/update",method = RequestMethod.POST,
-    consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Order updateOrder(@RequestBody OrderForm orderForm)
-    {
-        Order order=orderRepository.findOrderByOrderNo(orderForm.getOrderNo());
+    @RequestMapping(value = "/order/update", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Order updateOrder(@RequestBody OrderForm orderForm) {
+        Order order = orderRepository.findOrderByOrderNo(orderForm.getOrderNo());
         order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
         order.setTableNo(orderForm.getTableNo());
         order.setOrderState(orderForm.getState());
@@ -63,12 +64,11 @@ public class OrderRest {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/order/get",method = RequestMethod.GET,
-    consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/order/get", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Order> getOrder(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize,
-                                @RequestParam("state") Optional<String>state,@RequestParam("date") Optional<String>date)
-    {
-        return orderRepository.getOrders(page,pageSize,state,date);
+                                @RequestParam("state") Optional<String> state, @RequestParam("date") Optional<String> date) {
+        return orderRepository.getOrders(page, pageSize, state, date);
     }
 
 }
