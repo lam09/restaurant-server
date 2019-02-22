@@ -14,7 +14,6 @@ public class Restaurant {
     @Id
     String id;
 
-
     @Field("number")
     Integer number;
 
@@ -25,7 +24,7 @@ public class Restaurant {
 
     String telefon;
     @DBRef
-    Account adminAccount;
+    Account admin;
 
     @DBRef
     List<Account> accounts;
@@ -63,12 +62,12 @@ public class Restaurant {
         this.telefon = telefon;
     }
 
-    public Account getAdminAccount() {
-        return adminAccount;
+    public Account getAdmin() {
+        return admin;
     }
 
-    public void setAdminAccount(Account adminAccount) {
-        this.adminAccount = adminAccount;
+    public void setAdmin(Account adminAccount) {
+        this.admin = adminAccount;
     }
 
     public List<Account> getAccounts() {

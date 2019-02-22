@@ -1,5 +1,7 @@
 package com.mango.web.security.jwt;
 
+import com.mango.web.entity.Privilege;
+import com.mango.web.entity.Restaurant;
 import com.mango.web.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class JwtTokenProvider {
     private String secretKey = "secret";
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
+    private long validityInMilliseconds = 3600000*24*30; // 1month
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -49,12 +51,34 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String createTokenFromPrivileges(String username, List<Privilege> privileges) {
+
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("privileges",privileges);
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()//
+                .setClaims(claims)//
+                .setIssuedAt(now)//
+                .setExpiration(validity)//
+                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .compact();
+    }
+
+
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getPrivileges(String token) {
+
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 

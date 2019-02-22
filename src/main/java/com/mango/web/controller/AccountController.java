@@ -1,7 +1,9 @@
 package com.mango.web.controller;
 
+import com.mango.web.entity.Account;
 import com.mango.web.forms.AuthenticationRequest;
 import com.mango.web.repo.AccountRepository;
+import com.mango.web.repo.PrivilegeRepository;
 import com.mango.web.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,8 +40,14 @@ public class AccountController {
     @Autowired
     AccountRepository users;
 
+    @Autowired
+    PrivilegeRepository privilegeRepository;
+
     @PostMapping(value = "/auth/signin",consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
+        if(data==null){
+
+        }
         System.out.println("user is authenticating " );
             try {
             String username = data.getUsername();
@@ -47,12 +55,14 @@ public class AccountController {
 
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             System.out.println("user is authenticated " );
-
-            String token = jwtTokenProvider.createToken(username, this.users.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+                Account acc = users.findAccountByUsername(username).get();
+                String token = jwtTokenProvider.createToken(username, this.users.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+                String tokenFromPrivileges = jwtTokenProvider.createTokenFromPrivileges(username,privilegeRepository.findAllByAccount(acc));
             System.out.println("token generated " + token);
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
-            model.put("token", token);
+                model.put("token", token);
+                model.put("tokenFromPrivileges", tokenFromPrivileges);
             return ok(model);
         } catch (AuthenticationException e) {
                 System.out.println("error " );
@@ -61,7 +71,14 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/me")
+    @PostMapping(value = "/auth/register",consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity register(@RequestBody AuthenticationRequest data) {
+
+        return null;
+    }
+
+
+    @GetMapping("/auth/me")
     public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
         Map<Object, Object> model = new HashMap<>();
         model.put("username", userDetails.getUsername());

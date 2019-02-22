@@ -6,6 +6,7 @@ package com.mango.web.service;
 
 
 import com.mango.web.entity.Account;
+import com.mango.web.entity.Restaurant;
 import com.mango.web.repo.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,6 +30,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return this.accountRepository.findAccountByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
     }
+
+
+    public UserDetails loadUserPrivilegesWithRestaurant(String username, Restaurant restaurant) throws UsernameNotFoundException {
+        return this.accountRepository.findAccountByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
+    }
+
 /*    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.print("user email is "+username);
