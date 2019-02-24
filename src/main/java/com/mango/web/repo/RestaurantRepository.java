@@ -7,5 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface RestaurantRepository  extends MongoRepository<Restaurant,String> {
-    List<Restaurant> findRestaurantsByAccount(Account account);
+    Restaurant findRestaurantByAdmin(Account admin);
+    Restaurant findRestaurantById(String id);
 }

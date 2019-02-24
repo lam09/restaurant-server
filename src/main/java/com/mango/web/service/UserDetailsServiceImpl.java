@@ -6,16 +6,22 @@ package com.mango.web.service;
 
 
 import com.mango.web.entity.Account;
+import com.mango.web.entity.Privilege;
 import com.mango.web.entity.Restaurant;
 import com.mango.web.repo.AccountRepository;
+import com.mango.web.repo.PrivilegeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,6 +30,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,11 +41,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     public UserDetails loadUserPrivilegesWithRestaurant(String username, Restaurant restaurant) throws UsernameNotFoundException {
-        return this.accountRepository.findAccountByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
+        if(restaurant==null) return loadUserByUsername(username);
+        Account account = accountRepository.findAccountByUsername(username).get();
+        if(account==null)System.out.println("account not found");
+        Privilege privilege = privilegeRepository.findPrivilegeByAccountAndRestaurant(account,restaurant).get();
+        List<String> roles = account.getRoles();
+        roles.addAll(privilege.getRoles());
+        account.setRoles(roles);
+        return account;
     }
 
-/*    @Override
+  /*  @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.print("user email is "+username);
         Account user = accountRepository.findAccountByUsername(username).get();

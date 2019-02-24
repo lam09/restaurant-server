@@ -1,22 +1,26 @@
 package com.mango.web.security.jwt;
 
+import com.mango.web.entity.Account;
 import com.mango.web.entity.Privilege;
 import com.mango.web.entity.Restaurant;
+import com.mango.web.repo.AccountRepository;
+import com.mango.web.repo.PrivilegeRepository;
+import com.mango.web.repo.RestaurantRepository;
 import com.mango.web.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -30,6 +34,12 @@ public class JwtTokenProvider {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    PrivilegeRepository privilegeRepository;
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -51,9 +61,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createTokenFromPrivileges(String username, List<Privilege> privileges) {
+    public String createTokenFromPrivileges(String username,List<String>roles, List<String> privileges) {
 
         Claims claims = Jwts.claims().setSubject(username);
+        claims.put("roles",roles);
         claims.put("privileges",privileges);
 
         Date now = new Date();
@@ -68,8 +79,11 @@ public class JwtTokenProvider {
     }
 
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+    public Authentication getAuthentication(String token,String restaurantId) {
+        String username = getUsername(token);
+        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
+        UserDetails userDetails = this.userDetailsService.loadUserPrivilegesWithRestaurant(username,restaurant);
+        System.out.println("User authorities "+userDetails.getAuthorities().toString());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -77,18 +91,11 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getPrivileges(String token) {
-
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
-        }
-        return null;
-    }
+        String token = req.getHeader("Authorization");
+        return token;
+   }
 
     public boolean validateToken(String token) {
         try {

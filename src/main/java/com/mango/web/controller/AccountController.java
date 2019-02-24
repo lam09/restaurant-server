@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,13 +58,14 @@ public class AccountController {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             System.out.println("user is authenticated " );
                 Account acc = users.findAccountByUsername(username).get();
-                String token = jwtTokenProvider.createToken(username, this.users.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-                String tokenFromPrivileges = jwtTokenProvider.createTokenFromPrivileges(username,privilegeRepository.findAllByAccount(acc));
-            System.out.println("token generated " + token);
+             //   String token = jwtTokenProvider.createToken(username, this.users.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
+                ArrayList<String> privilegeIds  = new ArrayList<>();
+                privilegeRepository.findAllByAccount(acc).stream().forEach(s->privilegeIds.add(s.getId()));
+                String tokenFromPrivileges = jwtTokenProvider.createTokenFromPrivileges(username,acc.getRoles(), privilegeIds);
+            System.out.println("token generated " + tokenFromPrivileges);
             Map<Object, Object> model = new HashMap<>();
             model.put("username", username);
-                model.put("token", token);
-                model.put("tokenFromPrivileges", tokenFromPrivileges);
+            model.put("token", tokenFromPrivileges);
             return ok(model);
         } catch (AuthenticationException e) {
                 System.out.println("error " );
@@ -89,4 +92,10 @@ public class AccountController {
         );
         return ok(model);
     }
+    @GetMapping("/author/restaurant")
+    public ResponseEntity authorizateCurrentUser(@AuthenticationPrincipal Account userDetails){
+
+        return ok(null);
+    }
+
 }

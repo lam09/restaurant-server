@@ -8,6 +8,7 @@ import com.mango.web.repo.AccountRepository;
 import com.mango.web.repo.PrivilegeRepository;
 import com.mango.web.repo.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,7 +38,7 @@ public class RestaurantController {
 
     @Autowired
     PrivilegeRepository privilegeRepository;
-    @PostMapping("restaurant/register")
+    @PostMapping(value = "restaurant/register",consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity register(@RequestBody RestaurantRegisterForm form, @AuthenticationPrincipal UserDetails userDetails){
         String username = userDetails.getUsername();
@@ -53,10 +54,11 @@ public class RestaurantController {
         privilege.setAccount(acc);
         privilege.setRestaurant(restaurant);
         privilege.setRoles(Arrays.asList("ROLE_RES_MANAGER","ROLE_RES_WAITER","ROLE_RES_MEMBER"));
-        privilegeRepository.insert(privilege);
+        privilege=privilegeRepository.insert(privilege);
         Map<Object, Object> model = new HashMap<>();
         model.put("restaurant",restaurant);
         model.put("admin",acc);
+        model.put("privilege",privilege);
         return ok(model);
     }
 

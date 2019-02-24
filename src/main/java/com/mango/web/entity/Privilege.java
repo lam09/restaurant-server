@@ -5,10 +5,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.List;
 @Data
 @Document(collection = "privilege")
-public class Privilege {
+public class Privilege implements Serializable {
     @Id
     String id;
     @DBRef
