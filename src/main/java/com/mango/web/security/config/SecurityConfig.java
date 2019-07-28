@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -40,10 +41,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/signin").permitAll()
-                .antMatchers(HttpMethod.POST, "restaurant/register").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/food/*").hasRole("RES_MANAGER")
-                .antMatchers(HttpMethod.POST, "/food/insert").hasRole("RES_MANAGER")
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/register").permitAll()
+                .antMatchers("/restaurants").authenticated()
+                .antMatchers(HttpMethod.POST, "/restaurant/register").authenticated()
+                .antMatchers(HttpMethod.PUT,"/restaurant/update").hasRole("RES_MANAGER")
+                .antMatchers(HttpMethod.POST, "/food/new").hasRole("RES_WAITER")
+                .antMatchers(HttpMethod.GET, "/food/get").hasRole("RES_WAITER")
+                .antMatchers(HttpMethod.DELETE, "/food/delete").hasRole("RES_WAITER")
+                .antMatchers(HttpMethod.POST, "/food/update").hasRole("RES_WAITER")
+                .antMatchers(HttpMethod.GET, "/food/all").hasRole("RES_WAITER")
+                .antMatchers("/food/get").authenticated()
+                .antMatchers("/order/new").hasRole("RES_WAITER")
+                .antMatchers("/order/get").hasRole("RES_WAITER")
+                .antMatchers("/order/update").hasRole("RES_WAITER")
+                .antMatchers("/order/delete").hasRole("RES_WAITER")
+
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

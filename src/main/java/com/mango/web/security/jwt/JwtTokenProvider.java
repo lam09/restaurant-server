@@ -61,7 +61,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createTokenFromPrivileges(String username,List<String>roles, List<String> privileges) {
+ /*   public String createTokenFromPrivileges(String username,List<String>roles, List<String> privileges) {
 
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles",roles);
@@ -77,12 +77,16 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)//
                 .compact();
     }
+*/
 
-
-    public Authentication getAuthentication(String token,String restaurantId) {
+    public Authentication getAuthentication(String token,String res_id) {
         String username = getUsername(token);
-        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
-        UserDetails userDetails = this.userDetailsService.loadUserPrivilegesWithRestaurant(username,restaurant);
+        Restaurant restaurant=null;
+        if(res_id!=null)restaurant= restaurantRepository.findRestaurantById(res_id);
+        UserDetails userDetails = null;
+        if(restaurant==null)
+            userDetails = this.userDetailsService.loadUserByUsername(username);
+        else userDetails = this.userDetailsService.loadUserPrivilegesWithRestaurant(username,restaurant);
         System.out.println("User authorities "+userDetails.getAuthorities().toString());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -107,7 +111,8 @@ public class JwtTokenProvider {
 
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
+            return false;
+//            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
     }
 

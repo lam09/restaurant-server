@@ -5,6 +5,7 @@ package com.mango.web.service;
  */
 
 
+import com.google.gson.Gson;
 import com.mango.web.entity.Account;
 import com.mango.web.entity.Privilege;
 import com.mango.web.entity.Restaurant;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -44,9 +46,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(restaurant==null) return loadUserByUsername(username);
         Account account = accountRepository.findAccountByUsername(username).get();
         if(account==null)System.out.println("account not found");
-        Privilege privilege = privilegeRepository.findPrivilegeByAccountAndRestaurant(account,restaurant).get();
         List<String> roles = account.getRoles();
-        roles.addAll(privilege.getRoles());
+        account.getPrivileges().stream()
+                .filter(privilege -> privilege.getRestaurant().getId().compareTo(restaurant.getId())==0)
+                .forEach(privilege -> {roles.addAll(privilege.getRoles());});
         account.setRoles(roles);
         return account;
     }

@@ -1,5 +1,6 @@
 package com.mango.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,8 +14,10 @@ public class Privilege implements Serializable {
     @Id
     String id;
     @DBRef
+    @JsonIgnore
     Account account;
     @DBRef
+    @JsonIgnore
     Restaurant restaurant;
     List<String> roles;
 

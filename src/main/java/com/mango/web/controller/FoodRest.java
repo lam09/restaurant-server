@@ -19,7 +19,7 @@ public class FoodRest {
     FoodRepository foodRepository;
 
     @ResponseBody
-    @RequestMapping(value = "/food/insert",method = RequestMethod.POST,
+    @RequestMapping(value = "/food/new",method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Food insertFood( @RequestBody Food food){
         if(foodRepository.findFoodBySerial(food.getSerial())!=null) return null;

@@ -1,6 +1,7 @@
 package com.mango.web.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,11 +26,16 @@ public class Restaurant implements Serializable {
 
     String telefon;
     @DBRef
+    @JsonIgnore
     Account admin;
 
     @DBRef
+    @JsonIgnore
     List<Account> accounts;
 
+    @DBRef
+    @JsonIgnore
+    List<Food> foods;
 
     public String getId() {
         return id;

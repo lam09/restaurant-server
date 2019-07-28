@@ -1,8 +1,10 @@
 package com.mango.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Time;
@@ -13,6 +15,9 @@ import java.util.List;
 public class Order {
     public enum OrderState{WAITING,DELIVERED,COMPLETED,CANCELLED}
 
+    @DBRef
+    @JsonIgnore
+    Restaurant restaurant;
 
     @Id
     String id;
@@ -81,4 +86,11 @@ public class Order {
         this.time = time;
     }
 
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }

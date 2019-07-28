@@ -3,14 +3,18 @@ package com.mango.web.controller;
 import com.mango.web.entity.Food;
 import com.mango.web.entity.Order;
 import com.mango.web.entity.OrderItem;
+import com.mango.web.entity.Restaurant;
 import com.mango.web.forms.OrderForm;
 import com.mango.web.repo.FoodRepository;
 import com.mango.web.repo.OrderRepository;
+import com.mango.web.repo.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,17 +29,21 @@ public class OrderRest {
     @Autowired
     FoodRepository foodRepository;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
     @ResponseBody
-    @RequestMapping(value = "/order/newOrder", method = RequestMethod.POST,
+    @RequestMapping(value = "/order/new", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Order addNewOrder(@RequestBody OrderForm orderForm) {
+    public Order addNewOrder(@RequestBody OrderForm orderForm, HttpServletRequest req) {
+        String res_id = req.getHeader("restaurant-id");
+        Restaurant restaurant = restaurantRepository.findRestaurantById(res_id);
         Order order = new Order();
+        order.setRestaurant(restaurant);
         order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
         order.setTableNo(orderForm.getTableNo());
         Integer orderNo = orderRepository.lastOrderNoToday();
         order.setOrderNo(orderNo);
         order.setDate(new Date());
-
         return orderRepository.save(order);
     }
 
@@ -57,6 +65,7 @@ public class OrderRest {
             consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Order updateOrder(@RequestBody OrderForm orderForm) {
         Order order = orderRepository.findOrderByOrderNo(orderForm.getOrderNo());
+        if(order==null) return null;
         order.setOrder_items(getOrderItem(orderForm.getFoodSerialList()));
         order.setTableNo(orderForm.getTableNo());
         order.setOrderState(orderForm.getState());

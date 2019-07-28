@@ -1,9 +1,12 @@
 package com.mango.web;
 
+import com.mango.web.security.oauth2.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(AppProperties.class)
 public class MangoApplication {
 
     public static void main(String[] args) {

@@ -27,22 +27,22 @@ public class Init implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //...
-/*        Account member = new Account();
+   /*     Account member = new Account();
         member.setEmail("member@hello.com");
 
         member.setUsername("user");
-        member.setPassword(this.passwordEncoder.encode("password"));
+        member.setPassword(this.passwordEncoder.encode("123456"));
         member.setRoles(Arrays.asList( "ROLE_USER"));
         this.users.save(member);
         Account admin = new Account();
         admin.setEmail("admin@hello.com");
         admin.setUsername("admin");
-        admin.setPassword(this.passwordEncoder.encode("password"));
+        admin.setPassword(this.passwordEncoder.encode("123456"));
         admin.setRoles(Arrays.asList( "ROLE_USER,ROLE_ADMIN"));
         this.users.save(admin);*/
-        System.out.println("restaurant find by id "+restaurantRepository.findRestaurantById("5c716922d9489e439065adf7").getName());
-        this.restaurantRepository.findAll().forEach(r->System.out.println("restaurant " + r.getId() + " "+ r.getName()));
-        this.users.findAll().forEach(v -> System.out.println(" User :" + v.toString()));
+       // System.out.println("restaurant find by id "+restaurantRepository.findRestaurantById("5c716922d9489e439065adf7").getName());
+      //  this.restaurantRepository.findAll().forEach(r->System.out.println("restaurant " + r.getId() + " "+ r.getName()));
+       // this.users.findAll().forEach(v -> System.out.println(" User :" + v.toString()));
 
     }
 }
